@@ -12,12 +12,13 @@ const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 type PageProps = {
     params: {
         slug: string
+        contentType: string
     }
 }
 
-async function ContentPage({ params: { slug } }: PageProps) {
-    const content: any = await fetch(`${hostname}/api/getcontent/get-single-content?slug=${slug}`).then(res => res.json())
-    const ratings: any = await fetch(`${hostname}/api/addrating/get?contentid=${content._id}&slug=${slug}`).then(res => res.json())
+async function ContentPage({ params: { slug, contentType } }: PageProps) {
+    const content: any = await fetch(`${hostname}/api/getcontent/get-single-content?slug=${slug}&contentType=${contentType}`).then(res => res.json())
+    const ratings: any = await fetch(`${hostname}/api/addrating/get?contentid=${content._id}&slug=${slug}&contentType=${contentType}`).then(res => res.json())
 
     return (
         <main>
@@ -69,7 +70,7 @@ async function ContentPage({ params: { slug } }: PageProps) {
                                 </h3>
                             </div>
                         </div>
-                        <ReviewModal contentID={content._id} slug={slug} />
+                        <ReviewModal contentID={content._id} contentType={contentType} />
                     </div>
                 </div>
                 <div className="flex justify-center items-center">

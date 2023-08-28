@@ -6,8 +6,8 @@ async function ImageSlider() {
     const images = await fetch(`${hostname}/api/getcontent/get-slider-image`).then(response => response.json())
 
     return (
-        <>
-            {images && <ImageSliderComp images={images} />}</>
+        <section>
+            {images && <ImageSliderComp images={images} />}</section>
     )
 }
 

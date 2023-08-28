@@ -3,7 +3,7 @@ import ImageSlider from '@/components/Home/ImageSlider'
 
 export default function Home() {
   return (
-    <main className="">
+    <main>
       <ImageSlider />
       <BrowseCategories/>
     </main>

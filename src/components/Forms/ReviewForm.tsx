@@ -1,7 +1,9 @@
 'use client'
 import { useAppSelector } from '@/utils/redux/store';
+import { alertCall } from '@/utils/toast/alertCall';
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify'
 const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 interface ModalOptions {
@@ -9,13 +11,14 @@ interface ModalOptions {
     review: string
 }
 
-function ReviewForm({ setIsOpen, slug, contentID }: any) {
+function ReviewForm({ setIsOpen, contentType, contentID }: any) {
     const { register, handleSubmit } = useForm<ModalOptions>();
 
     const accessToken = useAppSelector((state) => state.accessToken.token)
 
     const onSubmit: SubmitHandler<ModalOptions> = async (data) => {
-        const res = await fetch(`${hostname}/api/addrating/add?slug=${slug}`, {
+        const id = toast.loading("Please wait...")
+        const payload = await fetch(`${hostname}/api/addrating/add?contentType=${contentType}`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -24,10 +27,16 @@ function ReviewForm({ setIsOpen, slug, contentID }: any) {
             },
             body: JSON.stringify({ contentID, rating: data.rating, review: data.review })
         }).then(res => res.json());
-        console.log(res);
-        // await addRating(user, data, movieID, showID)
+
+        if (payload.success) {
+            alertCall("update_success", payload.message, id);
+        } else {
+            alertCall("update_error", payload.error, id);
+        }
+
         setIsOpen(false)
     };
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}

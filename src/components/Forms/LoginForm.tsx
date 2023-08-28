@@ -1,9 +1,11 @@
 'use client'
 import { storeToken } from '@/utils/redux/slice/TokenSlice'
 import { useAppDispatch } from '@/utils/redux/store'
+import { alertCall } from '@/utils/toast/alertCall'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 interface userData {
@@ -19,6 +21,7 @@ function LoginForm() {
     const dispatch = useAppDispatch()
 
     const onSubmit: SubmitHandler<userData> = async (data) => {
+        const id = toast.loading("Please wait...")
         setLoading(true)
         const res = await fetch(`${hostname}/api/auth/login`, {
             method: "POST",
@@ -32,12 +35,13 @@ function LoginForm() {
         const payload = await res.json();
         // console.log(payload);
         if (payload.success) {
-            dispatch(storeToken(payload.accessToken));     
-            router.push("/")
+            dispatch(storeToken(payload.accessToken));
+            alertCall("update_success", "Login Success!", id);
         } else {
-            console.log(payload.accessToken);
+            alertCall("update_error", payload.error, id);
         }
         setLoading(false)
+        window.location.reload()
     }
 
     return (

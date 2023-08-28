@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Filepond from '../ui/Filepond'
 import { useAppSelector } from '@/utils/redux/store'
+import { toast } from 'react-toastify'
+import { alertCall } from '@/utils/toast/alertCall'
 const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 type User = {
@@ -38,8 +40,9 @@ function ProfileUpdateForm() {
     }, [])
 
     const onSubmit = async (data: any) => {
+        const id = toast.loading("Please wait...")
         setLoading(true)
-        const res = await fetch(`${hostname}/api/auth/update-user`, {
+        const payload = await fetch(`${hostname}/api/auth/update-user`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -47,10 +50,15 @@ function ProfileUpdateForm() {
                 "x-access-token": accessToken!
             },
             body: JSON.stringify({ pfpBase64: base64, username: data.username })
-        })
-        console.log(res);
+        }).then(res => res.json())
+
         setLoading(false)
-        // router.reload(window.location.pathname)
+
+        if (payload.success) {
+            alertCall("update_success", payload.message, id);
+        } else {
+            alertCall("update_error", payload.error, id);
+        }
     }
 
     return (

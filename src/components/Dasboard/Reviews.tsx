@@ -19,7 +19,6 @@ async function Reviews() {
     const showReviews = res.showRatings
 
     return (
-
         <section className='flex space-x-5 px-4 overflow-hidden h-[50vh]'>
             <div className='flex-1'>
             <h4 className='text-4xl font-bold bg-gradient-to-r from-pink-500 to-yellow-500 py-2 rounded-md px-4'>Movies</h4>

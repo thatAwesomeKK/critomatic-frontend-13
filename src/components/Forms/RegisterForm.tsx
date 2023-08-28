@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from "react-hook-form";
+const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 interface userData {
     email: string
@@ -18,6 +19,16 @@ function RegisterForm() {
         if (data.conPassword !== data.password) {
             return ({ error: "Password and Confirm Password Does Not Match" })
         }
+        const payload = await fetch(`${hostname}/api/auth/register`,{
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({username: data.username ,email: data.email, password: data.password})
+        }).then(res=>res.json())
+        console.log(payload);
+        
         setLoading(false)
     }
     return (

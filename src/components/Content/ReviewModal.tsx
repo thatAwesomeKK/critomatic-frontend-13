@@ -4,7 +4,7 @@ import { AiOutlineStar } from 'react-icons/ai'
 import ReviewForm from '../Forms/ReviewForm'
 import Providers from '@/app/(Providers)/Providers'
 
-function ReviewModal({ contentID, slug }: any) {
+function ReviewModal({ contentID, contentType }: any) {
     const [isOpen, setIsOpen] = useState(false)
     return (
         <>
@@ -16,18 +16,18 @@ function ReviewModal({ contentID, slug }: any) {
                     <AiOutlineStar className="h-8 w-8" />
                 </div>
             </div>
-            <Modal isOpen={isOpen} setIsOpen={setIsOpen} slug={slug} contentID={contentID} />
+            <Modal isOpen={isOpen} setIsOpen={setIsOpen} contentType={contentType} contentID={contentID} />
         </>
     )
 
 }
 
-const Modal = ({ isOpen, setIsOpen, slug, contentID }: any) => {
+const Modal = ({ isOpen, setIsOpen, contentType, contentID }: any) => {
 
     return (
         <dialog id="my_modal_1" className={`modal ${isOpen ? "modal-open" : ""}`}>
             <Providers>
-                <ReviewForm setIsOpen={setIsOpen} slug={slug} contentID={contentID} />
+                <ReviewForm setIsOpen={setIsOpen} contentType={contentType} contentID={contentID} />
             </Providers>
         </dialog>
     )

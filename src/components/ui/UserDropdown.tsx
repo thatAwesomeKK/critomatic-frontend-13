@@ -52,17 +52,29 @@ function UserDropdown() {
   )
 }
 
-const DropDown = ({ user }: { user: User }) => (
-  <div className='shadow-xl bg-white rounded-lg space-y-2 py-2'>
-    {user ? <DropdownItem Icon={BiLogOut} menuName={"Sign Out"} /> :
-      <Link href={"/auth/register"}>
-        <DropdownItem Icon={BiLogIn} menuName={"Sign In"} />
+const DropDown = ({ user }: { user: User }) => {
+  const logout = async () => {
+    const res = await fetch(`${hostname}/api/auth/logout`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json())
+    console.log(res)
+    window.location.reload()
+  }
+  return (
+    <div className='shadow-xl bg-white rounded-lg space-y-2 py-2'>
+      {user ? <div onClick={() => logout()}> <DropdownItem Icon={BiLogOut} menuName={"Sign Out"} /></div> :
+        <Link href={"/auth/register"}>
+          <DropdownItem Icon={BiLogIn} menuName={"Sign In"} />
+        </Link>}
+      {user && <Link href={"/dashboard/profile"}>
+        <DropdownItem Icon={BiUser} menuName={"Dashboard"} />
       </Link>}
-    {user && <Link href={"/dashboard/profile"}>
-      <DropdownItem Icon={BiUser} menuName={"Dashboard"} />
-    </Link>}
-  </div>
-)
+    </div>)
+}
 
 const DropdownItem = ({ Icon, menuName }: any) => (
   <div className='bg-white px-3 py-2 flex items-center space-x-2 group hover:bg-gray-100 w-72 rounded-lg h-12'>

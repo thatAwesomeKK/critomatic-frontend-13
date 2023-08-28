@@ -15,7 +15,7 @@ async function Content({ params: { contentType } }: PageProps) {
     return (
         <section className="max-w-[90vw] mx-auto px-5 my-10 sm:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {contents.map((content: any) => (
-                <Link key={content._id} passHref href={`/browse/${contentType}/${contentType}@${content.slug}`}>
+                <Link key={content._id} passHref href={`/browse/${contentType}/${content.slug}`}>
                     <ContentCard content={content} />
                 </Link>
             ))}
