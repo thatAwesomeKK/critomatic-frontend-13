@@ -157,8 +157,9 @@ async function ContentPage({ params: { slug } }: PageProps) {
 
 export async function generateStaticParams() {
     const contents = await fetch(`${hostname}/api/getcontent/get-slugs`).then(res => res.json())
-    return contents.content.map((event: any) => ({
-        slug: event.slug.toString()
+    // console.log(contents.content);
+    return contents.content.map((content: any) => ({
+        slug: content.slug.toString()
     }))
 }
 
