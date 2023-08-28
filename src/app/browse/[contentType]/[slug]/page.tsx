@@ -21,7 +21,6 @@ async function ContentPage({ params: { slug } }: PageProps) {
 
     return (
         <main>
-
             <div
                 className="w-full h-[60vh] bg-center bg-no-repeat bg-cover bg-fixed"
                 style={{
@@ -156,7 +155,7 @@ async function ContentPage({ params: { slug } }: PageProps) {
 }
 
 export async function generateStaticParams() {
-    const contents = await fetch(`${hostname}/api/getcontent/get-slugs`).then(res => res.json())
+    const contents = await fetch(`${hostname}/api/getcontent/get-slugs`, { next: { revalidate: 60 } }).then(res => res.json())
     return contents.content.map((content: any) => ({
         contentType: content.contentType.toString(),
         slug: content.slug.toString()
