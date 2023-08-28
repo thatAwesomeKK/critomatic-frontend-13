@@ -5,7 +5,6 @@ const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 async function Reviews() {
     const accessToken = store.getState().accessToken.token
-    console.log(accessToken);
 
     const res = await fetch(`${hostname}/api/fetchprofile/get-ratings`, {
         method: 'GET',
@@ -26,7 +25,7 @@ async function Reviews() {
             <h4 className='text-4xl font-bold bg-gradient-to-r from-pink-500 to-yellow-500 py-2 rounded-md px-4'>Movies</h4>
                 <div className='h-full pb-20 overflow-y-scroll scrollbar-hide'>
                     {showReviews.map((review: any, id: any) => (
-                        <ReviewCard key={id} review={review} />
+                        <ReviewCard contentType={"shows"} key={id} review={review} />
                     ))}
                 </div>
             </div>
@@ -34,7 +33,7 @@ async function Reviews() {
             <h4 className='text-4xl font-bold bg-gradient-to-r from-pink-500 to-yellow-500 py-2 rounded-md px-4'>Shows</h4>
                 <div className='h-full pb-20 overflow-y-scroll scrollbar-hide'>
                     {movieReviews.map((review: any, id: any) => (
-                        <ReviewCard key={id} review={review} />
+                        <ReviewCard contentType={"movies"} key={id} review={review} />
                     ))}
                 </div>
             </div>

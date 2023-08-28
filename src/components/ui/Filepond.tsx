@@ -46,7 +46,7 @@ function Filepond({ setBase64, profile }: PageProps) {
 
     useEffect(() => {
         setFiles([{
-            source: profile?.pfp || "https://links.papareact.com/gll",
+            source: profile?.pfp!,
             options: { type: "local" }
         }])
     }, [profile?.pfp])

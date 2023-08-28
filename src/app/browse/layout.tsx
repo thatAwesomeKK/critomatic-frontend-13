@@ -7,10 +7,10 @@ function layout({
     children: React.ReactNode
 }) {
     return (
-        <section>
+        <main>
             <ContentNav />
             {children}
-        </section>
+        </main>
     )
 }
 
