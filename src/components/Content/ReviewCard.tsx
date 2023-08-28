@@ -23,8 +23,8 @@ const ReviewCard = ({ rating }: any) => {
                     <Image
                         src={rating.userID.pfp || "https://links.papareact.com/gll"}
                         alt=""
-                        layout="fill"
                         objectFit="cover"
+                        fill
                     />
                 </div>
                 <div className="flex flex-col ml-2">

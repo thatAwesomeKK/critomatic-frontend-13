@@ -21,7 +21,7 @@ async function ContentPage({ params: { slug } }: PageProps) {
 
     return (
         <main>
-            
+
             <div
                 className="w-full h-[60vh] bg-center bg-no-repeat bg-cover bg-fixed"
                 style={{
@@ -70,7 +70,7 @@ async function ContentPage({ params: { slug } }: PageProps) {
                                 </h3>
                             </div>
                         </div>
-                        <ReviewModal contentID={content._id} slug={slug}/>
+                        <ReviewModal contentID={content._id} slug={slug} />
                     </div>
                 </div>
                 <div className="flex justify-center items-center">
@@ -153,6 +153,13 @@ async function ContentPage({ params: { slug } }: PageProps) {
             </div>
         </main>
     )
+}
+
+export async function generateStaticParams() {
+    const contents = await fetch(`${hostname}/api/getcontent/get-slugs`).then(res => res.json())
+    return contents.content.map((event: any) => ({
+        slug: event.slug.toString()
+    }))
 }
 
 export default ContentPage
