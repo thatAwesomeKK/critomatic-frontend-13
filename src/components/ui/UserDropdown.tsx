@@ -42,8 +42,7 @@ function UserDropdown() {
         src={user?.pfp || "https://links.papareact.com/gll"}
         alt=""
         className='absolute object-cover rounded-full bg-yellow'
-        width={200}
-        height={200}
+        fill
       />
       <menu className='absolute top-14 right-3'>
         {isOpen && <div className="animate-fadeIn"><DropDown user={user!} /></div>}

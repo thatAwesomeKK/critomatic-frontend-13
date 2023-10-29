@@ -1,10 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import Filepond from '../ui/Filepond'
-import { useAppSelector } from '@/utils/redux/store'
 import { toast } from 'react-toastify'
 import { alertCall } from '@/utils/toast/alertCall'
+import PfpHolder from '../ui/PfpHolder'
+
 const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 type User = {
@@ -15,42 +15,53 @@ type User = {
     _id: string
 }
 
-function ProfileUpdateForm() {
-    const { register, handleSubmit, setValue } = useForm()
-    const [base64, setBase64] = useState('')
-    const [profile, setProfile] = useState<User | null>()
-    const [loading, setLoading] = useState(false)
+interface Props {
+    user: User
+    accessToken: string
+}
 
-    const accessToken = useAppSelector((state) => state.accessToken.token)
+function ProfileUpdateForm({ user, accessToken }: Props) {
+    const { register, handleSubmit, setValue } = useForm()
+    const [profileImg, setProfileImg] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [initialPfp, setInitialPfp] = useState<string | null | undefined>('')
 
     useEffect(() => {
-        const fetchUser = async () => {
-            const user = await fetch(`${hostname}/api/fetchprofile/get-profile`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": accessToken!
-                }
-            })
-            const res = await user.json()
-            setProfile(res.user)
+        if (user) {
+            setInitialPfp(user.pfp)
+            setValue('username', user.username)
         }
-        fetchUser()
-    }, [])
+    }, [user])
+
+
+    //Picking Up From system and adding to UploadRingImage State
+    const addImageToUpload = (e: any) => {
+        const reader = new FileReader();
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+        }
+        reader.onload = (readerEvent) => {
+            setProfileImg(readerEvent.target?.result! as string);
+        };
+    };
+
 
     const onSubmit = async (data: any) => {
         const id = toast.loading("Please wait...")
         setLoading(true)
+
         const payload = await fetch(`${hostname}/api/auth/update-user`, {
-            method: 'POST',
-            credentials: 'include',
+            method: "PUT",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
                 "x-access-token": accessToken!
             },
-            body: JSON.stringify({ pfpBase64: base64, username: data.username })
-        }).then(res => res.json())
+            body: JSON.stringify({
+                pfp: profileImg,
+                username: data.username,
+            }),
+        }).then((res) => res.json());
 
         setLoading(false)
 
@@ -63,11 +74,11 @@ function ProfileUpdateForm() {
 
     return (
         <>
-            <Filepond setBase64={setBase64} profile={profile} />
-            <form className="flex flex-col justify-center items-center max-w-lg mx-auto py-4 px-8 bg-[rgb(7,38,49)] rounded-lg" onSubmit={handleSubmit(onSubmit)}>
+            <PfpHolder addImageToUpload={addImageToUpload} pfp={initialPfp} setInitialPfp={setInitialPfp} profileImg={profileImg} />
+            <form className="flex flex-col justify-center items-center max-w-lg mx-auto py-4 px-8 bg-[rgb(7,38,49)] rounded-lg mt-3" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col w-full my-2">
                     <label className="text-xl font-medium" htmlFor="email">Email</label>
-                    {profile && <label className="text-lg">{profile?.email}</label>}
+                    {user && <label className="text-lg">{user.email}</label>}
                 </div>
                 <div className="flex flex-col w-full my-2">
                     <label className="text-xl font-medium" htmlFor="username">Username</label>
