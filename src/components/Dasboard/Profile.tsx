@@ -1,7 +1,7 @@
 import ProfileUpdateForm from '@/components/Forms/ProfileUpdateForm'
 import React from 'react'
 
-const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
+const hostname = process.env.API_IP_ADDRESS
 
 interface Props {
   accessToken: string
