@@ -10,6 +10,8 @@ interface PageProps {
     }
 }
 
+export const dynamic = 'force-dynamic'
+
 function Dashboard({ params: { dashType } }: PageProps) {
     const accessToken = store.getState().accessToken.token
     return (
