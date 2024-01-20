@@ -1,11 +1,10 @@
-'use client'
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
-import { useRouter } from 'next/navigation'
+
 const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
 
 async function BrowseCategories() {
-    const router = useRouter()
     const categories = await fetch(`${hostname}/api/getcontent/get-category-image`).then(res => res.json())
     const getAnImageMovie = () => {
         let image: string = categories.movie[Math.floor(Math.random() * categories.movie.length)];
@@ -24,16 +23,16 @@ async function BrowseCategories() {
                 <h1 className='font-bold text-5xl mb-5 underline'>Browse Categories</h1>
                 {/* making the div flexbox and putting everything in center */}
                 <div className='flex flex-wrap justify-center items-center'>
-                    <div onClick={() => router.push("/browse/movies")} className="p-4 relative flex justify-center items-center transition-transform duration-150 ease-in-out hover:scale-105 cursor-pointer group">
+                    <Link href={"/browse/movies"} className="p-4 relative flex justify-center items-center transition-transform duration-150 ease-in-out hover:scale-105 cursor-pointer group">
                         {/* This is the Actual Card being shown */}
                         <p className='absolute text-center z-10 font-bold text-5xl transition-transform duration-100 ease-in-out group-hover:scale-0'>Movies</p>
                         <Image className='rounded-2xl opacity-60 group-hover:opacity-100' src={getAnImageMovie()} alt="" height={550} width={390} />
-                    </div>
-                    <div onClick={() => router.push("/browse/shows")} className="p-4 relative flex justify-center items-center transition-transform duration-150 ease-in-out hover:scale-105 group cursor-pointer">
+                    </Link>
+                    <Link href={"/browse/shows"} className="p-4 relative flex justify-center items-center transition-transform duration-150 ease-in-out hover:scale-105 group cursor-pointer">
                         {/* This is the Actual Card being shown */}
                         <p className='absolute text-center z-10 font-bold text-5xl transition-transform duration-100 ease-in-out group-hover:scale-0'>Tv Shows</p>
                         <Image className='rounded-2xl opacity-60 group-hover:opacity-100' src={getAnImageShow()} alt="" height={550} width={390} />
-                    </div>
+                    </Link>
                 </div>
             </div>
         </section>

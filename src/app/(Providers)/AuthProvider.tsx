@@ -2,7 +2,7 @@ import { storeToken } from '@/utils/redux/slice/TokenSlice';
 import { store } from '@/utils/redux/store';
 import { cookies } from 'next/headers'
 import PreLoader from '../PreLoader';
-const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS
+const hostname = process.env.API_IP_ADDRESS
 
 const refresh = async () => {
     const cookieStore = cookies()
