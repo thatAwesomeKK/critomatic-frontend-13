@@ -1,22 +1,16 @@
-import { store } from "@/utils/redux/store";
 import React from "react";
 import ReviewCard from "./ReviewCard";
-const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS;
+import { cookies } from "next/headers";
+import { fetchUserRatings } from "@/utils/apiCalls/profile";
 
 async function Reviews() {
-  const accessToken = store.getState().accessToken.token;
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value as string;
 
-  const res = await fetch(`${hostname}/api/fetchprofile/get-ratings`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": accessToken!,
-    },
-  }).then((res) => res.json());
+  const contentReviews = await fetchUserRatings(accessToken!);
 
-  const movieReviews = res.movieRatings || [];
-  const showReviews = res.showRatings || [];
+  const movieReviews = contentReviews.movieRatings || [];
+  const showReviews = contentReviews.showRatings || [];
 
   return (
     <section className="flex space-x-5 px-4 overflow-hidden h-[50vh]">

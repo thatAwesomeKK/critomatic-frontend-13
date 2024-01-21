@@ -1,13 +1,10 @@
 "use client";
-import { storeToken } from "@/utils/redux/slice/TokenSlice";
-import { store, useAppSelector } from "@/utils/redux/store";
+import { logout } from "@/utils/apiCalls/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BiLogOut, BiLogIn } from "react-icons/bi";
 import { BiUser } from "react-icons/bi";
-const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS;
 
 type User = {
   email: string;
@@ -17,27 +14,13 @@ type User = {
   _id: string;
 };
 
-function UserDropdown() {
-  const accessToken = useAppSelector((state) => state.accessToken.token);
-  const [user, setUser] = useState<User | null>(null);
+interface Props {
+  user: User;
+}
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = await fetch(`${hostname}/api/fetchprofile/get-profile`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token": accessToken!,
-        },
-      });
-      const res = await user.json();
-      setUser(res.user);
-    };
-    fetchUser();
-  }, []);
-
+function UserDropdown({ user }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div
       onClick={() => setIsOpen(!isOpen)}
@@ -61,19 +44,6 @@ function UserDropdown() {
 }
 
 const DropDown = ({ user }: { user: User }) => {
-  const router = useRouter();
-  const logout = async () => {
-    const res = await fetch(`${hostname}/api/auth/logout`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-    console.log(res);
-    store.dispatch(storeToken(null));
-    router.refresh();
-  };
   return (
     <div className="shadow-xl bg-white rounded-lg space-y-2 py-2">
       {user ? (

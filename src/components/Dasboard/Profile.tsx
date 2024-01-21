@@ -1,22 +1,14 @@
 import ProfileUpdateForm from "@/components/Forms/ProfileUpdateForm";
-import { store } from "@/utils/redux/store";
+import { fetchUser } from "@/utils/apiCalls/profile";
+import { cookies } from "next/headers";
 import React from "react";
 
-const hostname = process.env.API_IP_ADDRESS;
-
 async function Profile() {
-  const accessToken = store.getState().accessToken.token;
-  const user = await fetch(`${hostname}/api/fetchprofile/get-profile`, {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      "x-access-token": accessToken!,
-    },
-    next: { revalidate: 0 },
-  }).then((res) => res.json());
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value as string;
+  const user = await fetchUser(accessToken!);
 
-  return <ProfileUpdateForm user={user.user} accessToken={accessToken!} />;
+  return <ProfileUpdateForm user={user}/>;
 }
 
 export default Profile;

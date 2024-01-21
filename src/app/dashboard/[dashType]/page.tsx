@@ -1,12 +1,12 @@
 import Providers from "@/app/(Providers)/Providers";
 import React from "react";
-const Profile = dynamic(() => import("../../../components/Dasboard/Profile"), {
+import { default as lazyLoad } from "next/dynamic";
+const Profile = lazyLoad(() => import("../../../components/Dasboard/Profile"), {
   ssr: false,
 });
-const Reviews = dynamic(() => import("../../../components/Dasboard/Reviews"), {
+const Reviews = lazyLoad(() => import("../../../components/Dasboard/Reviews"), {
   ssr: false,
 });
-import dynamic from "next/dynamic";
 
 interface PageProps {
   params: {
@@ -14,7 +14,7 @@ interface PageProps {
   };
 }
 
-// export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 function Dashboard({ params: { dashType } }: PageProps) {
   return (

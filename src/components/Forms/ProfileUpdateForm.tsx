@@ -1,11 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { alertCall } from "@/utils/toast/alertCall";
 import PfpHolder from "../ui/PfpHolder";
-
-const hostname = process.env.NEXT_PUBLIC_API_IP_ADDRESS;
+import { updateUser } from "@/utils/apiCalls/auth";
 
 type User = {
   email: string;
@@ -17,10 +14,9 @@ type User = {
 
 interface Props {
   user: User;
-  accessToken: string;
 }
 
-function ProfileUpdateForm({ user, accessToken }: Props) {
+function ProfileUpdateForm({ user }: Props) {
   const { register, handleSubmit, setValue } = useForm();
   const [profileImg, setProfileImg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -45,29 +41,9 @@ function ProfileUpdateForm({ user, accessToken }: Props) {
   };
 
   const onSubmit = async (data: any) => {
-    const id = toast.loading("Please wait...");
     setLoading(true);
-
-    const payload = await fetch(`${hostname}/api/auth/update-user`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token": accessToken!,
-      },
-      body: JSON.stringify({
-        pfp: profileImg,
-        username: data.username,
-      }),
-    }).then((res) => res.json());
-
+    await updateUser(data, profileImg);
     setLoading(false);
-
-    if (payload.success) {
-      alertCall("update_success", payload.message, id);
-    } else {
-      alertCall("update_error", payload.error, id);
-    }
   };
 
   if (!user) {
