@@ -8,8 +8,6 @@ interface Props {
 }
 
 async function Profile({ accessToken }: Props) {
-  console.log(accessToken);
-
   const user = await fetch(`${hostname}/api/fetchprofile/get-profile`, {
     method: "POST",
     credentials: "include",
