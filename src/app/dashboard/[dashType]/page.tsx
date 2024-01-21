@@ -6,8 +6,6 @@ const Profile = dynamic(() => import("../../../components/Dasboard/Profile"), {
 const Reviews = dynamic(() => import("../../../components/Dasboard/Reviews"), {
   ssr: false,
 });
-// import Reviews from '../../../components/Dasboard/Reviews';
-import { store } from "@/utils/redux/store";
 import dynamic from "next/dynamic";
 
 interface PageProps {
@@ -19,10 +17,9 @@ interface PageProps {
 // export const dynamic = 'force-dynamic'
 
 function Dashboard({ params: { dashType } }: PageProps) {
-  const accessToken = store.getState().accessToken.token;
   return (
     <Providers>
-      {dashType === "profile" && <Profile accessToken={accessToken!} />}
+      {dashType === "profile" && <Profile />}
       {dashType === "reviews" && <Reviews />}
     </Providers>
   );
