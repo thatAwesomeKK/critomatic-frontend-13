@@ -1,25 +1,25 @@
-import ProfileUpdateForm from '@/components/Forms/ProfileUpdateForm'
-import React from 'react'
+import ProfileUpdateForm from "@/components/Forms/ProfileUpdateForm";
+import React from "react";
 
-const hostname = process.env.API_IP_ADDRESS
+const hostname = process.env.API_IP_ADDRESS;
 
 interface Props {
-  accessToken: string
+  accessToken: string;
 }
 
 async function Profile({ accessToken }: Props) {
+  console.log(accessToken);
+
   const user = await fetch(`${hostname}/api/fetchprofile/get-profile`, {
-    method: 'POST',
-    credentials: 'include',
+    method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      "x-access-token": accessToken!
-    }
-  }).then(res => res.json())
-  
-  return (
-    <ProfileUpdateForm user={user.user} accessToken={accessToken}/>
-  )
+      "x-access-token": accessToken!,
+    },
+  }).then((res) => res.json());
+
+  return <ProfileUpdateForm user={user.user} accessToken={accessToken} />;
 }
 
-export default Profile
+export default Profile;
