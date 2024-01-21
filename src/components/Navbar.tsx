@@ -48,9 +48,7 @@ async function Navbar() {
               />
               <IoSearchCircleOutline className="h-7 cursor-pointer" />
             </div>
-            <Providers>
-              <UserDropdown user={user}/>
-            </Providers>
+            <UserDropdown user={user} />
           </div>
         </div>
       </div>
