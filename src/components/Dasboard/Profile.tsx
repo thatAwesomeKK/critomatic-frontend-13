@@ -17,6 +17,7 @@ async function Profile({ accessToken }: Props) {
       "Content-Type": "application/json",
       "x-access-token": accessToken!,
     },
+    next: { revalidate: 0 },
   }).then((res) => res.json());
 
   return <ProfileUpdateForm user={user.user} accessToken={accessToken} />;
